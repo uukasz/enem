@@ -1,0 +1,161 @@
+﻿<UserControl x:Class="MeshManipulation.View.RectangularMeshView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="600">
+    <Grid Name="MainViewGrid" Margin="5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="200" />
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" BorderThickness="1" BorderBrush="Black">
+            <Grid Name="MeshArea" Background="Transparent">
+                <ItemsControl Name="InitialVerticesItems" ItemsSource="{Binding InitialVertices}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas IsItemsHost="True" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="FrameworkElement">
+                            <Setter Property="Canvas.Left" Value="{Binding X}" />
+                            <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="Point">
+                            <Ellipse 
+                            Width="10"
+                            Height="10"
+                            Fill="Blue" 
+                            Margin="-4,-4,4,4" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <ItemsControl Name="VerticesItems" ItemsSource="{Binding Vertices}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas IsItemsHost="True" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="FrameworkElement">
+                            <Setter Property="Canvas.Left" Value="{Binding X}" />
+                            <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="Point">
+                            <Ellipse 
+                            Width="10"
+                            Height="10"
+                            Fill="Blue" 
+                            Margin="-4,-4,4,4" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <ItemsControl Name="ElementsItems" ItemsSource="{Binding Elements}" Panel.ZIndex="0">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas IsItemsHost="True" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Line X1="{Binding E1.P1.X}"
+                                  X2="{Binding E1.P2.X}"  
+                                  Y1="{Binding E1.P1.Y}"
+                                  Y2="{Binding E1.P2.Y}"
+                                  StrokeThickness="1"
+                                  Stroke="Green" />
+                                <Line X1="{Binding E2.P1.X}"
+                                  X2="{Binding E2.P2.X}"  
+                                  Y1="{Binding E2.P1.Y}"
+                                  Y2="{Binding E2.P2.Y}"
+                                  StrokeThickness="1"
+                                  Stroke="Green" />
+                                <Line X1="{Binding E3.P1.X}"
+                                  X2="{Binding E3.P2.X}"  
+                                  Y1="{Binding E3.P1.Y}"
+                                  Y2="{Binding E3.P2.Y}"
+                                  StrokeThickness="1"
+                                  Stroke="Green" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <Grid.InputBindings>
+                    <MouseBinding MouseAction="LeftClick" 
+                            Command="{Binding PutPointCommand}"
+                            CommandParameter="{Binding ElementName=MeshArea, Path=.}"/>
+                </Grid.InputBindings>
+            </Grid>
+        </Border>
+        
+
+        <Grid Name="MenuArea" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="35" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Button Name="CreateMeshBtn" 
+                    Content="Stworz siatkę" 
+                    Grid.Row="0" 
+                    Grid.Column="0" 
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Center" 
+                    Padding="5,2,5,2"
+                    Command="{Binding CreateMeshCommand}"
+                    />
+            <Button Name="CreateMeshStopBtn" 
+                    Content="Usuń siatkę" 
+                    Grid.Row="0" 
+                    Grid.Column="1" 
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Center" 
+                    Padding="5,2,5,2"
+                    Command="{Binding RemoveMeshCommand}"
+                    />
+
+            <Button Name="DivideMeshBtn" 
+                    Content="Podziel siatkę" 
+                    Grid.Row="1" 
+                    Grid.Column="0" 
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Center" 
+                    Padding="5,2,5,2"
+                    Command="{Binding DivideMeshCommand}"
+                    />
+
+            <TextBlock Name="ElementsCountLabelTxt"
+                       Text="Ilość elementów: "
+                       Grid.Row="2"
+                       Grid.Column="0"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Padding="5,2,5,2" />
+            <TextBlock Name="ElementsCountTxt"
+                       Text="{Binding Elements.Count}"
+                       Grid.Row="2"
+                       Grid.Column="1"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Padding="5,2,5,2" />
+
+        </Grid>
+    </Grid>
+</UserControl>
