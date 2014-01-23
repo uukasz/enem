@@ -1,5 +1,6 @@
 ﻿using Common;
 using Mesh;
+using Mesh.Division;
 using Mesh.FiniteElement;
 using Microsoft.Practices.Prism.Commands;
 using System;
@@ -88,6 +89,9 @@ namespace MeshManipulation.ViewModel
             }
         }
 
+        /// <summary>
+        /// kolekcja wierzcholkow elementow siatki
+        /// </summary>
         public ObservableCollection<Point> Vertices
         {
             get
@@ -162,8 +166,11 @@ namespace MeshManipulation.ViewModel
         {
             if (Mesh != null)
             {
-                Mesh.DivideElements();
+                IMeshDivider divider = new SimpleMeshDivider();
+                Mesh.Elements = divider.DivideMesh(Mesh.Elements);
+
                 RaisePropertyChanged("Elements");
+                RaisePropertyChanged("Vertices");
             }
         }
 

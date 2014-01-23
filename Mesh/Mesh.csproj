@@ -39,6 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Division\IMeshDivider.cs" />
+    <Compile Include="Division\SimpleMeshDivider.cs" />
     <Compile Include="FiniteElementMesh.cs" />
     <Compile Include="FiniteElement\AbstractElement.cs" />
     <Compile Include="FiniteElement\ElementEdge\SegmentEdge.cs" />

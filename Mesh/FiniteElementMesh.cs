@@ -27,23 +27,5 @@ namespace Mesh
         }
 
         #endregion
-
-        #region PUBLIC METHODS
-
-        /// <summary>
-        /// podzial wszystkich elementow w siatce
-        /// </summary>
-        public virtual void DivideElements()
-        {
-            List<AbstractElement> newElements = new List<AbstractElement>();
-            foreach (AbstractElement element in Elements)
-            {
-                newElements.AddRange(element.Divide());
-            }
-
-            Elements = newElements;
-        }
-
-        #endregion
     }
 }

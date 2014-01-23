@@ -11,7 +11,7 @@
             <ColumnDefinition Width="200" />
         </Grid.ColumnDefinitions>
 
-        <Border Grid.Column="0" BorderThickness="1" BorderBrush="Black">
+        <Border Grid.Column="0" BorderThickness="1" BorderBrush="Black" Background="Black">
             <Grid Name="MeshArea" Background="Transparent">
                 <ItemsControl Name="InitialVerticesItems" ItemsSource="{Binding InitialVertices}">
                     <ItemsControl.ItemsPanel>
@@ -30,7 +30,7 @@
                             <Ellipse 
                             Width="10"
                             Height="10"
-                            Fill="Blue" 
+                            Fill="LightBlue" 
                             Margin="-4,-4,4,4" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -53,7 +53,7 @@
                             <Ellipse 
                             Width="10"
                             Height="10"
-                            Fill="Blue" 
+                            Fill="LightBlue" 
                             Margin="-4,-4,4,4" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -85,7 +85,7 @@
                                   Y1="{Binding E3.P1.Y}"
                                   Y2="{Binding E3.P2.Y}"
                                   StrokeThickness="1"
-                                  Stroke="Green" />
+                                  Stroke="LightGreen" />
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

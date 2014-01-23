@@ -50,6 +50,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Division\SimpleMeshDividerTest.cs" />
     <Compile Include="FiniteElement\ElementEdge\SegmentEdgeTest.cs" />
     <Compile Include="FiniteElement\TriangleElementTest.cs" />
     <Compile Include="FiniteElement\AbstractElementTest.cs" />
