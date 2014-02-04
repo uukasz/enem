@@ -39,6 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Creation\IMeshCreator.cs" />
+    <Compile Include="Creation\RectMeshFromTwoPointsCreator.cs" />
+    <Compile Include="Division\ConcurrentMeshDivider.cs" />
     <Compile Include="Division\IMeshDivider.cs" />
     <Compile Include="Division\SimpleMeshDivider.cs" />
     <Compile Include="FiniteElementMesh.cs" />

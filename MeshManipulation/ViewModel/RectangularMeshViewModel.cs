@@ -1,5 +1,6 @@
 ﻿using Common;
 using Mesh;
+using Mesh.Creation;
 using Mesh.Division;
 using Mesh.FiniteElement;
 using Microsoft.Practices.Prism.Commands;
@@ -39,11 +40,6 @@ namespace MeshManipulation.ViewModel
 
         #region FIELDS
 
-        /// <summary>
-        /// czy trwa tworzenie siatki
-        /// </summary>
-        private bool _duringMeshCreation = false;
-
         #endregion
 
         #region PROPERTIES
@@ -54,8 +50,13 @@ namespace MeshManipulation.ViewModel
         /// </summary>
         public ObservableCollection<Point> InitialVertices
         {
-            get { return _initialVertices; }
-            set { _initialVertices = value; RaisePropertyChanged(); }
+            get 
+            {
+                if (MeshCreator == null) return null;
+
+                return new ObservableCollection<Point>(
+                    (MeshCreator as RectMeshFromTwoPointsCreator).InitialPoints); 
+            }
         }
 
         private RectangularMesh _mesh = null;
@@ -73,6 +74,11 @@ namespace MeshManipulation.ViewModel
                 RaisePropertyChanged("Vertices");
             }
         }
+
+        /// <summary>
+        /// tworca siatki
+        /// </summary>
+        public IMeshCreator MeshCreator { get; set; }
 
         /// <summary>
         /// kolekcja elementow siatki - do bindowania
@@ -117,7 +123,8 @@ namespace MeshManipulation.ViewModel
         public ICommand CreateMeshCommand { get; set; }
         private void CreateMeshCommand_Execute()
         {
-            InitializeMeshCreation();
+            Mesh = null;
+            MeshCreator = new RectMeshFromTwoPointsCreator();
         }
 
         /// <summary>
@@ -126,8 +133,8 @@ namespace MeshManipulation.ViewModel
         public ICommand RemoveMeshCommand { get; set; }
         private void RemoveMeshCommand_Execute()
         {
-            EndMeshCreation();
             Mesh = null;
+            MeshCreator = null;
         }
 
         /// <summary>
@@ -136,26 +143,42 @@ namespace MeshManipulation.ViewModel
         public ICommand PutPointCommand { get; set; }
         private void PutPointCommand_Execute(object meshArea)
         {
+            // jesli kreator nie ma siatki, wyjdz z funkcji
+            if (MeshCreator == null || MeshCreator.Mesh != null)
+            {
+                return;
+            }
+
+            // stworz punkt z pozycji myszki
             System.Windows.Controls.Grid area = meshArea as System.Windows.Controls.Grid;
-
             System.Windows.Point mousePosition = Mouse.GetPosition(area);
-
             Point p = new Point(mousePosition.X, mousePosition.Y);
 
-            InitialVertices.Add(p);
-
-            if (InitialVertices.Count >= 2)
+            // dodaj go do kreatora i jesli wygeneruje on siatke, to ja przypisz sobie
+            if (MeshCreator.PutPoint(p))
             {
-                FinalizeMeshCreation(InitialVertices[0], InitialVertices[1]);
+                Mesh = MeshCreator.Mesh as RectangularMesh;
+                MeshCreator = null;
             }
+            RaisePropertyChanged("InitialVertices");
         }
+
         /// <summary>
         /// czy mozna wstawic punkt
         /// </summary>
         /// <returns></returns>
         private bool PutPointCommand_CanExecute(object parameter)
         {
-            return _duringMeshCreation;
+            if (MeshCreator == null)
+            {
+                return false;
+            }
+            else if (MeshCreator.Mesh == null)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -172,37 +195,6 @@ namespace MeshManipulation.ViewModel
                 RaisePropertyChanged("Elements");
                 RaisePropertyChanged("Vertices");
             }
-        }
-
-        #endregion
-
-        #region PRIVATE METHODS
-
-        /// <summary>
-        /// inicjalizacja procesu tworzenia siatki
-        /// </summary>
-        private void InitializeMeshCreation()
-        {
-            RemoveMeshCommand_Execute();
-            _duringMeshCreation = true;
-        }
-
-        private void FinalizeMeshCreation(Point p1, Point p2)
-        {
-            // zakoncz tworzenie siatki
-            EndMeshCreation();
-
-            // skonstruuj siatke prostokatna z tych dwoch punktow
-            Mesh = new RectangularMesh(p1, p2);
-        }
-
-        /// <summary>
-        /// zakonczenie procesu tworzenia siatki
-        /// </summary>
-        private void EndMeshCreation()
-        {
-            _duringMeshCreation = false;
-            InitialVertices.Clear();
         }
 
         #endregion

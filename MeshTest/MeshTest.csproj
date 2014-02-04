@@ -50,7 +50,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Creation\RectMeshFromTwoPointsCreatorTest.cs" />
     <Compile Include="Division\SimpleMeshDividerTest.cs" />
+    <Compile Include="Division\ConcurrentMeshDividerTest.cs" />
     <Compile Include="FiniteElement\ElementEdge\SegmentEdgeTest.cs" />
     <Compile Include="FiniteElement\TriangleElementTest.cs" />
     <Compile Include="FiniteElement\AbstractElementTest.cs" />
