@@ -10,5 +10,10 @@ namespace Mesh.Division
     public interface IMeshDivider
     {
         List<AbstractElement> DivideMesh(List<AbstractElement> elements);
+
+        event PercentCompletedHandler PercentCompleted;
+        double PercentCompletedDelta { get;}
     }
+
+    public delegate void PercentCompletedHandler(double completedPercent);
 }

@@ -37,5 +37,10 @@ namespace Mesh.Division
 
             return graph;
         }
+
+        public event PercentCompletedHandler PercentCompleted;
+
+
+        public double PercentCompletedDelta { get; private set; }
     }
 }

@@ -36,7 +36,7 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <ItemsControl Name="VerticesItems" ItemsSource="{Binding Vertices}">
+                <!--<ItemsControl Name="VerticesItems" ItemsSource="{Binding Vertices}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Canvas IsItemsHost="True" />
@@ -57,7 +57,7 @@
                             Margin="-4,-4,4,4" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                </ItemsControl>-->
 
                 <ItemsControl Name="ElementsItems" ItemsSource="{Binding Elements}" Panel.ZIndex="0">
                     <ItemsControl.ItemsPanel>
@@ -109,6 +109,7 @@
                 <RowDefinition Height="30" />
                 <RowDefinition Height="30" />
                 <RowDefinition Height="35" />
+                <RowDefinition Height="35" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
@@ -139,6 +140,7 @@
                     HorizontalAlignment="Center" 
                     Padding="5,2,5,2"
                     Command="{Binding DivideMeshCommand}"
+                    CommandParameter="{Binding ElementName=DivisionPercentPB, Path=.}"
                     />
 
             <TextBlock Name="ElementsCountLabelTxt"
@@ -155,6 +157,29 @@
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        Padding="5,2,5,2" />
+
+            <TextBlock Name="DivisionPercentLabelTxt"
+                       Text="Ukończony podział: "
+                       Grid.Row="3"
+                       Grid.Column="0"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Padding="5,2,5,2" />
+            <ProgressBar Name="DivisionPercentPB" 
+                       Grid.Row="3"
+                       Grid.Column="1"
+                       VerticalAlignment="Stretch"
+                       HorizontalAlignment="Stretch"
+                       Margin="2,5" 
+                       Minimum="0"
+                       Maximum="100"/>
+            <TextBlock Name="DivisionPercentTxt"
+                       Grid.Row="3"
+                       Grid.Column="1"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Padding="5,2,5,2" 
+                       Text="{Binding ElementName=DivisionPercentPB, Path=Value, StringFormat={}{0:0}%}" />
 
         </Grid>
     </Grid>

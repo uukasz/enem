@@ -63,5 +63,66 @@ namespace MeshTest.Division
             IMeshDivider divider = new SimpleMeshDivider();
             divider.DivideMesh(elements);
         }
+
+        [TestMethod]
+        public void TestRaisePercentCompleted()
+        {
+            FiniteElementMesh mesh = new RectangularMesh(new Point(0.0, 0.0), new Point(2.0, 2.0));
+
+            IMeshDivider divider = new SimpleMeshDivider();
+
+            List<double> expectedPercentages = new List<double>(new double[]{0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0});
+            List<double> percentagesCompleted = new List<double>();
+
+            mesh.Elements = divider.DivideMesh(mesh.Elements);
+            mesh.Elements = divider.DivideMesh(mesh.Elements);
+            mesh.Elements = divider.DivideMesh(mesh.Elements);
+            mesh.Elements = divider.DivideMesh(mesh.Elements);
+
+            // podepnij pod event procentu zakonczonych podzialow lambde dodajaca kazdy procent do listy procentow
+            divider.PercentCompleted +=
+                (percent) =>
+                {
+                    percentagesCompleted.Add(percent);
+                };
+
+            mesh.Elements = divider.DivideMesh(mesh.Elements);
+
+            Assert.AreEqual(expectedPercentages.Count, percentagesCompleted.Count);
+
+            for (int i = 0; i < percentagesCompleted.Count; ++i)
+            {
+                int actual = (int)Math.Floor(10.0 * percentagesCompleted[i]);
+                int expected = (int)Math.Floor(10.0 * expectedPercentages[i]);
+                Assert.AreEqual(expected, actual);
+            }
+        }
+
+        [TestMethod]
+        public void TestRaisePercentCompletedWithTwoElements()
+        {
+            FiniteElementMesh mesh = new RectangularMesh(new Point(0.0, 0.0), new Point(2.0, 2.0));
+
+            IMeshDivider divider = new SimpleMeshDivider();
+
+            List<double> expectedPercentages = new List<double>(new double[] { 0.5, 1.0 });
+            List<double> percentagesCompleted = new List<double>();
+
+            // podepnij pod event procentu zakonczonych podzialow lambde dodajaca kazdy procent do listy procentow
+            divider.PercentCompleted +=
+                (percent) =>
+                {
+                    percentagesCompleted.Add(percent);
+                };
+
+            mesh.Elements = divider.DivideMesh(mesh.Elements);
+
+            Assert.AreEqual(2, percentagesCompleted.Count);
+
+            for (int i = 0; i < percentagesCompleted.Count; ++i )
+            {
+                Assert.AreEqual(expectedPercentages[i], percentagesCompleted[i]);
+            }
+        }
     }
 }
